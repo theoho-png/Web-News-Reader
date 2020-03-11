@@ -1,17 +1,25 @@
 from bs4 import BeautifulSoup
-import webbrowser
-from pypi import selenium
-from selenium import webdriver
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
+import urllib.request
+import urllib.parse
+import re
 
-print("Input Link")
+
 #url = input()
+url = "https://www.abc.net.au/news/2020-03-11/coronavirus-stimulus-package-to-include-billions-for-apprentices/12046688"
+values = {'s':'basics', 'submit':'search'}
+data = urllib.parse.urlencode(values)
+data = data.encode('utf-8')
+req = urllib.request.Request(url, data)
+resp = urllib.request.urlopen(req)
 
-f = open("https://www.w3schools.com/python/python_file_handling.asp", "r")
-print (f)
+respData = resp.read()
+paragraphs = re.findall(r'<p>(.*?)</p>', str(respData))
+for eachP in paragraphs:
+    print (eachP)
+#https://www.youtube.com/watch?v=GEshegZzt3M """
 
-#f.close
 
-#soup = BeautifulSoup(html_doc, 'html.parser')
-#print(soup.prettify())
+#else:
+#print("Unable to optain web page")
+
+#with open() as urlFile:
