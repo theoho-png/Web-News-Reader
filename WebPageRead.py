@@ -3,8 +3,6 @@ import urllib.request
 import urllib.parse
 import re
 
-#url = "https://www.abc.net.au/news/2020-03-11/coronavirus-stimulus-package-to-include-billions-for-apprentices/12046688"
-
 class Reader:
 
     def loadUrl(self):
@@ -27,7 +25,10 @@ class Reader:
 if __name__ == "__main__":
     print("Pleas input news link.")
     url = input()
-    r = Reader()
-    soup = BeautifulSoup(r.loadUrl(), 'html.parser')
-    
-    print(r.finder())
+    link = urllib.request.urlopen(url)
+    if (link.status == 200):
+        r = Reader()
+        soup = BeautifulSoup(r.loadUrl(), 'html.parser')
+        print(r.finder())
+    else:
+        print ("Unable to open web page.")
