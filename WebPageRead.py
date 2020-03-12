@@ -11,8 +11,13 @@ req = urllib.request.Request(url, data)
 resp = urllib.request.urlopen(req)
 respData = resp.read()
 #https://www.youtube.com/watch?v=GEshegZzt3M
-
 htmlDoc = str(respData)
 
 soup = BeautifulSoup(htmlDoc, 'html.parser')
-print(soup.prettify())
+container = ""
+
+for passage in soup.find_all('p'):
+    container += passage.text
+
+print (container)
+
