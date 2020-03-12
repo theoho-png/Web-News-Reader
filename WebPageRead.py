@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import urllib.request
 import urllib.parse
+import re
 
 #url = input()
 url = "https://www.abc.net.au/news/2020-03-11/coronavirus-stimulus-package-to-include-billions-for-apprentices/12046688"
@@ -14,10 +15,13 @@ respData = resp.read()
 htmlDoc = str(respData)
 
 soup = BeautifulSoup(htmlDoc, 'html.parser')
-container = ""
+soup = soup.find("div", class_="article section")
 
-for passage in soup.find_all('p'):
+container = ""
+filterList = [',', '.', '$', '\\', '/'', ''"']
+
+for passage in soup.find_all("p", class_=""):
     container += passage.text
+    container = re.sub(r'[^\w]', ' ', container)
 
 print (container)
-
