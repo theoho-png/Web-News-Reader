@@ -7,6 +7,7 @@ import string
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+from nltk.stem import PorterStemmer
 
 class Reader():
 
@@ -24,17 +25,18 @@ class Reader():
     
     def pFinder(self):
         data = []
+        ps = PorterStemmer()
         stopWords = set(stopwords.words("english"))
         content = soup.find("div", class_="article section")
         for passage in content.find_all("p", class_=""):
-            words = re.sub('\\n','testing', passage.text)
+            words = re.sub('\\n','', passage.text)
             words = re.sub('\[.*?''""...]', '',words)
             words = re.sub('[%s]'%re.escape(string.punctuation), '', words)
             words = re.sub(r'^\w*\d\w', ' ', words)
-            words = word_tokenize(words)
-            for w in words:
+            wordList = word_tokenize(words)
+            for w in wordList:
                 if w not in stopWords:
-                    data.append(w)
+                    data.append(ps.stem(w))
         return data
         
     def topicFinder(self):
@@ -60,6 +62,7 @@ def webState(url):
 
 if __name__ == "__main__":
     #nltk.download()
+    
     t = Trainer()
     i = 0
     pages = ["https://www.abc.net.au/news/2020-03-12/us-stocks-bear-market-as-coronavirus-sparks-recession-fears/12048310?section=business", "https://www.abc.net.au/news/2020-03-12/coronavirus-pandemic-suspends-nba-cancels-e3-and-major-events/12049670?section=politics", "https://www.abc.net.au/news/2020-03-12/coronavirus-provides-australian-sport-with-sense-of-dread/12050454?section=analysis", "https://www.abc.net.au/news/2020-03-11/formula-one-team-members-quarantined-due-to-coronavirus-fears/12047494?section=sport", "https://www.abc.net.au/news/science/2020-03-12/fossil-of-hummingbird-like-dinosaur-found-in-myanmar-amber/12033634", "https://www.abc.net.au/news/2020-03-12/nsw-minister-gareth-ward-found-naked-disorientated-by-police/12050738", "https://www.abc.net.au/news/2020-03-12/emerald-teen-daley-catip-join-prestigious-dance-academy/12039558"]
